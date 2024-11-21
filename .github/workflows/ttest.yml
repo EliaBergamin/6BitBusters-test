@@ -19,7 +19,18 @@ jobs:
               run: npm install @octokit/rest
             
             - name: Run script 
-              run: node .github/test.js
+              run: |
+                node -e "
+                const { Octokit } = require('@octokit/rest');
+                const octokit = new Octokit({ auth: process.env.TEST_TOKEN });
+                (async () => {
+                  const { data } = await octokit.repos.get({
+                    owner: 'username',
+                    repo: 'repository-name',
+                  });
+                  console.log('Repository Info:', data);
+                })();
+                "
               env:
                 TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
             
