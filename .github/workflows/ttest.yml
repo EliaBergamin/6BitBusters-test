@@ -18,8 +18,8 @@ jobs:
             - name: Install dependencies
               run: npm install @octokit/rest
             
-            - name: Run script
-              run: node test.js
+            - name: Run script 
+              run: node .github/test.js
               env:
                 TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
             
