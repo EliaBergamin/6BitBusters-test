@@ -1,0 +1,37 @@
+name: TTest
+on:
+    pull_request:
+        branches:
+            - main
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Set up node
+              uses: actions/setup-node@v3
+              with:
+                node-version: 16
+
+            - name: Install dependencies
+              run: npm install @octokit/rest
+            
+            - name: Run script 
+              run: |
+                node -e "
+                              
+                (async () => {
+                  const { Octokit } = await import('@octokit/rest');
+                  const octokit = new Octokit({ auth: process.env.TEST_TOKEN });
+                  const { data } = await octokit.repos.get({
+                    owner: 'username',
+                    repo: 'repository-name',
+                  });
+                  console.log('Repository Info:', data);
+                })();
+                "
+              env:
+                TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
+            
