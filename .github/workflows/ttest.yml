@@ -21,9 +21,10 @@ jobs:
             - name: Run script 
               run: |
                 node -e "
-                import { Octokit } from '@octokit/rest';
-                const octokit = new Octokit({ auth: process.env.TEST_TOKEN });
+                              
                 (async () => {
+                  const { Octokit } = await import('@octokit/rest');
+                  const octokit = new Octokit({ auth: process.env.TEST_TOKEN });
                   const { data } = await octokit.repos.get({
                     owner: 'username',
                     repo: 'repository-name',
